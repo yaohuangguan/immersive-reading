@@ -21,44 +21,45 @@ export const StudyGuideModal: React.FC<StudyGuideModalProps> = ({ isOpen, onClos
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-6">
           <motion.div 
             initial={{ opacity: 0 }} 
             animate={{ opacity: 1 }} 
             exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/90 backdrop-blur-sm"
             onClick={onClose}
           />
           <motion.div 
-            initial={{ scale: 0.95, opacity: 0, y: 20 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.95, opacity: 0, y: 20 }}
-            className="bg-slate-900 border border-slate-700 w-full max-w-6xl h-[95vh] rounded-3xl overflow-hidden shadow-2xl relative flex flex-col"
+            initial={{ y: "100%" }}
+            animate={{ y: 0 }}
+            exit={{ y: "100%" }}
+            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            className="bg-slate-900 sm:border border-slate-700 w-full sm:max-w-6xl h-[100dvh] sm:h-[95vh] sm:rounded-3xl overflow-hidden shadow-2xl relative flex flex-col"
           >
             {/* Header */}
-            <div className="p-6 border-b border-slate-800 bg-slate-900/50 flex justify-between items-center shrink-0">
-              <div>
-                <span className="text-xs font-bold text-indigo-400 tracking-wider uppercase">{t.guide.title}</span>
-                <h2 className="text-2xl sm:text-3xl font-serif font-bold text-slate-100">{bookTitle}</h2>
+            <div className="p-4 sm:p-6 border-b border-slate-800 bg-slate-900/50 flex justify-between items-center shrink-0 pt-safe sm:pt-6">
+              <div className="overflow-hidden">
+                <span className="text-[10px] font-bold text-indigo-400 tracking-wider uppercase block">{t.guide.title}</span>
+                <h2 className="text-xl sm:text-3xl font-serif font-bold text-slate-100 truncate">{bookTitle}</h2>
               </div>
               <button 
                 onClick={onClose}
-                className="p-2 hover:bg-slate-800 rounded-full text-slate-400 hover:text-white transition-colors"
+                className="p-2 hover:bg-slate-800 rounded-full text-slate-400 hover:text-white transition-colors bg-slate-800/50"
               >
                 <X size={24} />
               </button>
             </div>
 
             {/* Content */}
-            <div className="flex-1 overflow-y-auto p-6 sm:p-10 space-y-10 bg-[#0f172a]">
+            <div className="flex-1 overflow-y-auto p-4 sm:p-10 space-y-8 bg-[#0f172a] pb-20">
               
               {/* Summary Section */}
-              <section className="bg-slate-800/40 border border-slate-700 rounded-2xl p-6 sm:p-8">
-                <div className="flex items-center gap-3 mb-6 text-emerald-400 border-b border-slate-700/50 pb-4">
-                    <BookOpen size={28} />
-                    <h3 className="text-2xl font-bold font-serif">{t.guide.summary}</h3>
+              <section className="bg-slate-800/40 border border-slate-700 rounded-2xl p-4 sm:p-8">
+                <div className="flex items-center gap-3 mb-4 sm:mb-6 text-emerald-400 border-b border-slate-700/50 pb-3">
+                    <BookOpen size={24} />
+                    <h3 className="text-xl sm:text-2xl font-bold font-serif">{t.guide.summary}</h3>
                 </div>
-                <div className="prose prose-invert prose-lg max-w-none text-slate-300">
+                <div className="prose prose-base sm:prose-lg prose-invert max-w-none text-slate-300">
                     <ReactMarkdown remarkPlugins={[remarkGfm]}>
                         {guide.globalSummary}
                     </ReactMarkdown>
@@ -68,18 +69,18 @@ export const StudyGuideModal: React.FC<StudyGuideModalProps> = ({ isOpen, onClos
               <div className="grid lg:grid-cols-2 gap-8">
                 {/* Characters Section */}
                 <section>
-                    <div className="flex items-center gap-3 mb-6 text-purple-400">
+                    <div className="flex items-center gap-3 mb-4 text-purple-400">
                         <Users size={24} />
-                        <h3 className="text-2xl font-bold font-serif">{t.guide.characters}</h3>
+                        <h3 className="text-xl sm:text-2xl font-bold font-serif">{t.guide.characters}</h3>
                     </div>
                     <div className="space-y-4">
                         {guide.characters.map((char, idx) => (
-                            <div key={idx} className="bg-slate-800/60 p-6 rounded-xl border border-slate-700 hover:border-purple-500/50 transition-colors shadow-md">
-                                <div className="flex justify-between items-start mb-3">
-                                    <h4 className="font-bold text-slate-100 text-xl">{char.name}</h4>
-                                    <span className="text-xs bg-purple-900/40 text-purple-300 px-3 py-1 rounded-full border border-purple-500/20">{char.role}</span>
+                            <div key={idx} className="bg-slate-800/60 p-4 sm:p-6 rounded-xl border border-slate-700 hover:border-purple-500/50 transition-colors shadow-md">
+                                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2 sm:mb-3 gap-2">
+                                    <h4 className="font-bold text-slate-100 text-lg">{char.name}</h4>
+                                    <span className="text-xs bg-purple-900/40 text-purple-300 px-2 py-1 rounded-full border border-purple-500/20 self-start">{char.role}</span>
                                 </div>
-                                <p className="text-base text-slate-400 leading-relaxed">{char.description}</p>
+                                <p className="text-sm sm:text-base text-slate-400 leading-relaxed">{char.description}</p>
                             </div>
                         ))}
                     </div>
@@ -87,15 +88,15 @@ export const StudyGuideModal: React.FC<StudyGuideModalProps> = ({ isOpen, onClos
 
                 {/* Themes Section */}
                 <section>
-                    <div className="flex items-center gap-3 mb-6 text-yellow-400">
+                    <div className="flex items-center gap-3 mb-4 text-yellow-400">
                         <Lightbulb size={24} />
-                        <h3 className="text-2xl font-bold font-serif">{t.guide.themes}</h3>
+                        <h3 className="text-xl sm:text-2xl font-bold font-serif">{t.guide.themes}</h3>
                     </div>
                     <div className="space-y-4">
                         {guide.themes.map((theme, idx) => (
-                            <div key={idx} className="bg-slate-800/60 p-6 rounded-xl border border-slate-700 hover:border-yellow-500/50 transition-colors shadow-md">
-                                <h4 className="font-bold text-slate-100 text-xl mb-3 text-yellow-100/90">{theme.name}</h4>
-                                <p className="text-base text-slate-400 leading-relaxed">{theme.description}</p>
+                            <div key={idx} className="bg-slate-800/60 p-4 sm:p-6 rounded-xl border border-slate-700 hover:border-yellow-500/50 transition-colors shadow-md">
+                                <h4 className="font-bold text-slate-100 text-lg mb-2 text-yellow-100/90">{theme.name}</h4>
+                                <p className="text-sm sm:text-base text-slate-400 leading-relaxed">{theme.description}</p>
                             </div>
                         ))}
                     </div>

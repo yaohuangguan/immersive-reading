@@ -9,8 +9,8 @@ import { ChapterHub } from './components/activities/ChapterHub';
 import { PreferencesForm } from './components/PreferencesForm';
 import { StudyGuideModal } from './components/StudyGuideModal';
 import { generateLearningPlan, generateQuiz, generateFlashcards, generateStudyGuide, generateChapterGuide } from './services/geminiService';
-import { AppState, Chapter, ActivityType, QuizQuestion, Flashcard, UserPreferences, ChapterGuide } from './types';
-import { Award, BookOpenText, Library, Globe, ArrowLeft } from 'lucide-react';
+import { AppState, ActivityType, QuizQuestion, Flashcard, UserPreferences, ChapterGuide } from './types';
+import { Award, BookOpenText, Library, Globe, ArrowLeft, X } from 'lucide-react';
 import { useLanguage } from './contexts/LanguageContext';
 
 const App: React.FC = () => {
@@ -157,7 +157,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0f172a] text-slate-100 font-sans selection:bg-indigo-500/30">
+    <div className="min-h-screen bg-[#0f172a] text-slate-100 font-sans selection:bg-indigo-500/30 flex flex-col">
       
       {/* 1. Hero / Landing */}
       {!state.currentBook && !state.isLoading && (
@@ -166,7 +166,7 @@ const App: React.FC = () => {
 
       {/* 1.5 Loading State */}
       {state.isLoading && (
-          <div className="fixed inset-0 z-[60] flex flex-col items-center justify-center bg-[#0f172a]/90 backdrop-blur-sm">
+          <div className="fixed inset-0 z-[60] flex flex-col items-center justify-center bg-[#0f172a]/90 backdrop-blur-sm p-6 text-center">
               <div className="w-16 h-16 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mb-6"></div>
               <h2 className="text-2xl font-serif font-bold text-white mb-2">{t.app.creating}</h2>
               <p className="text-indigo-300 animate-pulse">{state.loadingMessage}</p>
@@ -183,59 +183,55 @@ const App: React.FC = () => {
 
       {/* 3. Main Dashboard */}
       {state.currentBook && !state.isLoading && (
-        <div className="pb-20">
-          <header className="sticky top-0 z-30 bg-[#0f172a]/80 backdrop-blur-md border-b border-slate-800">
-            <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center shadow-lg shadow-indigo-500/20">
-                    <BookOpenText size={20} className="text-white" />
+        <div className="flex-1 flex flex-col pb-safe">
+          <header className="sticky top-0 z-30 bg-[#0f172a]/95 backdrop-blur-md border-b border-slate-800 pt-safe transition-all">
+            <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+              <div className="flex items-center gap-3 overflow-hidden">
+                <div className="w-9 h-9 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center shadow-lg shadow-indigo-500/20 shrink-0">
+                    <BookOpenText size={18} className="text-white" />
                 </div>
-                <div>
-                  <h1 className="font-bold text-lg font-serif leading-none">{state.currentBook.title}</h1>
-                  <span className="text-xs text-slate-400">{t.app.subtitle}</span>
+                <div className="min-w-0">
+                  <h1 className="font-bold text-base font-serif leading-none truncate">{state.currentBook.title}</h1>
+                  <span className="text-[10px] text-slate-400 uppercase tracking-wider">{t.app.subtitle}</span>
                 </div>
               </div>
 
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3 shrink-0">
                 <button 
                     onClick={() => setLanguage(language === 'en' ? 'zh' : 'en')}
-                    className="hidden sm:flex p-2 rounded-full hover:bg-slate-800 text-slate-400 hover:text-white transition-colors"
+                    className="p-2 rounded-full hover:bg-slate-800 text-slate-400 hover:text-white transition-colors"
                 >
                     <Globe size={18} />
                 </button>
 
                 <button 
                     onClick={() => setShowStudyGuide(true)}
-                    className="hidden sm:flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-full text-sm font-medium transition-colors"
+                    className="p-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-full text-indigo-400 transition-colors"
+                    aria-label={t.app.studyGuide}
                 >
-                    <Library size={16} className="text-indigo-400" />
-                    {t.app.studyGuide}
+                    <Library size={18} />
                 </button>
-                <div className="flex items-center gap-2 bg-slate-800/50 px-3 py-1.5 rounded-full border border-slate-700">
-                    <Award size={16} className="text-yellow-500" />
-                    <span className="font-mono font-bold text-yellow-100">{state.xp} XP</span>
+                
+                <div className="flex items-center gap-1.5 bg-slate-800/50 px-2.5 py-1 rounded-full border border-slate-700">
+                    <Award size={14} className="text-yellow-500" />
+                    <span className="font-mono font-bold text-xs text-yellow-100">{state.xp}</span>
                 </div>
+
                 <button 
                   onClick={() => setState(prev => ({ ...prev, currentBook: null }))}
-                  className="text-sm font-medium text-slate-400 hover:text-white transition-colors"
+                  className="p-2 hover:bg-red-900/20 text-slate-500 hover:text-red-400 rounded-full transition-colors"
+                  aria-label={t.app.exit}
                 >
-                  {t.app.exit}
+                  <X size={18} />
                 </button>
               </div>
             </div>
           </header>
 
-          <main>
-             <div className="text-center py-10 px-4">
-                 <h2 className="text-3xl font-bold font-serif mb-2">{t.app.journey}</h2>
-                 <p className="text-slate-400">{t.app.journeySub}</p>
-                 <button 
-                    onClick={() => setShowStudyGuide(true)}
-                    className="sm:hidden mt-4 inline-flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-full text-sm font-medium text-slate-300"
-                >
-                    <Library size={16} className="text-indigo-400" />
-                    {t.app.viewGuide}
-                </button>
+          <main className="flex-1">
+             <div className="text-center py-8 px-4">
+                 <h2 className="text-2xl md:text-3xl font-bold font-serif mb-2">{t.app.journey}</h2>
+                 <p className="text-sm md:text-base text-slate-400">{t.app.journeySub}</p>
              </div>
              
              <LearningMap 
@@ -256,14 +252,16 @@ const App: React.FC = () => {
         {/* If an activity is active, show that activity. Otherwise show Hub. */}
         {activeActivity ? (
             <div className="relative h-full flex flex-col">
-                <button 
-                    onClick={() => setActiveActivity(null)}
-                    className="absolute top-0 left-0 z-10 flex items-center gap-1 text-sm text-slate-400 hover:text-white transition-colors bg-slate-900/50 px-3 py-1 rounded-full"
-                >
-                    <ArrowLeft size={14} /> {t.hub.back}
-                </button>
+                <div className="absolute top-0 left-0 w-full z-10 p-4 bg-gradient-to-b from-slate-900 to-transparent">
+                  <button 
+                      onClick={() => setActiveActivity(null)}
+                      className="flex items-center gap-1 text-sm text-slate-200 bg-slate-800/80 backdrop-blur px-4 py-2 rounded-full shadow-lg border border-slate-700"
+                  >
+                      <ArrowLeft size={16} /> {t.hub.back}
+                  </button>
+                </div>
                 
-                <div className="h-full pt-8">
+                <div className="h-full pt-16">
                     {activeActivity.type === ActivityType.QUIZ && (
                         <QuizGame 
                             questions={activeActivity.data as QuizQuestion[]}

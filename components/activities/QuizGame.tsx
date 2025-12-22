@@ -40,18 +40,18 @@ export const QuizGame: React.FC<QuizGameProps> = ({ questions, onComplete }) => 
   if (!currentQuestion) return <div>Loading questions...</div>;
 
   return (
-    <div className="max-w-3xl mx-auto py-8 px-4">
-      <div className="mb-8 flex justify-between items-center text-sm text-slate-400 font-medium">
+    <div className="max-w-2xl mx-auto py-4 px-4 pb-20">
+      <div className="mb-6 flex justify-between items-center text-sm text-slate-400 font-medium">
         <span>{t.activities.question} {currentIndex + 1} / {questions.length}</span>
-        <span>{t.activities.score}: {score}</span>
+        <span className="px-3 py-1 bg-slate-800 rounded-full">{t.activities.score}: {score}</span>
       </div>
 
       <div className="mb-8">
-        <h3 className="text-2xl md:text-3xl font-bold text-white mb-8 leading-relaxed font-serif">
+        <h3 className="text-xl md:text-2xl font-bold text-white mb-6 leading-relaxed font-serif">
           {currentQuestion.question}
         </h3>
 
-        <div className="space-y-4">
+        <div className="space-y-3">
           {currentQuestion.options.map((option, idx) => {
             let stateStyle = "border-slate-700 bg-slate-800 hover:bg-slate-700";
             
@@ -70,12 +70,12 @@ export const QuizGame: React.FC<QuizGameProps> = ({ questions, onComplete }) => 
             return (
               <motion.button
                 key={idx}
-                whileTap={{ scale: 0.99 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => handleOptionClick(idx)}
-                className={`w-full text-left p-5 rounded-xl border-2 transition-all flex justify-between items-center group ${stateStyle}`}
+                className={`w-full text-left p-4 md:p-5 rounded-xl border-2 transition-all flex justify-between items-center group min-h-[60px] ${stateStyle}`}
                 disabled={showResult}
               >
-                <span className="text-lg text-slate-200 group-hover:text-white transition-colors">{option}</span>
+                <span className="text-base text-slate-200 group-hover:text-white transition-colors">{option}</span>
                 {showResult && idx === currentQuestion.correctAnswerIndex && <Check className="text-green-500 shrink-0 ml-4" />}
                 {showResult && idx === selectedOption && idx !== currentQuestion.correctAnswerIndex && <X className="text-red-500 shrink-0 ml-4" />}
               </motion.button>
@@ -88,22 +88,22 @@ export const QuizGame: React.FC<QuizGameProps> = ({ questions, onComplete }) => 
         <motion.div 
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-slate-800/80 border border-slate-700 rounded-xl p-6 mb-6 shadow-lg"
+          className="bg-slate-800/80 border border-slate-700 rounded-xl p-5 mb-6 shadow-lg"
         >
-          <p className="text-slate-300 leading-relaxed text-lg">
-            <span className="font-bold text-indigo-400 block mb-2">{t.activities.insight}: </span> 
+          <p className="text-slate-300 leading-relaxed text-base">
+            <span className="font-bold text-indigo-400 block mb-1 text-sm uppercase tracking-wider">{t.activities.insight}: </span> 
             {currentQuestion.explanation}
           </p>
         </motion.div>
       )}
 
-      <div className="flex justify-end pt-4">
+      <div className="fixed bottom-0 left-0 right-0 p-4 bg-[#0f172a] border-t border-slate-800 z-10 pb-safe">
         <button
           onClick={nextQuestion}
           disabled={!showResult}
-          className={`flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-lg transition-all ${
+          className={`w-full flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold text-lg transition-all ${
             showResult 
-              ? 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-600/20 transform hover:-translate-y-1' 
+              ? 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-600/20 active:scale-[0.98]' 
               : 'bg-slate-800 text-slate-500 cursor-not-allowed'
           }`}
         >
